@@ -72,15 +72,18 @@ int main(int argc, char* argv[]) {
         ss >> old_node1;
         ss >> old_node2;
         ss >> weight;
-        /*
+        
+        //with cutoffs
+        
         if(std::stoi(weight) > cutoff){
             file_out << node_map[old_node1] << ' ' << node_map[old_node2];
             file_out << "\n";
         }
-        */
+        
 
-        file_out << node_map[old_node1] << ' ' << node_map[old_node2];
-        file_out << "\n";
+        //without cutoffs
+        //file_out << node_map[old_node1] << ' ' << node_map[old_node2];
+        //file_out << "\n";
     }
 
     file_in.close();

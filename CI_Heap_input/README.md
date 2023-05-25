@@ -1,0 +1,1 @@
+input folder for the CI algorithm

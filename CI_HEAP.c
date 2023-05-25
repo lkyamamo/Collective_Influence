@@ -175,7 +175,27 @@ int_t **makeRandomGraph(const char *NETWORK, int_t N) {
 		i++;
 	}
 	fclose(list);
+	
+
+	//debugging to find out what is wrong with the graph
+	FILE* file = fopen("output.txt", "w");
+    if (file == NULL) {
+        printf("Failed to open the file for writing.\n");
+
+    }
+
+    for (int i = 0; i < N+1; i++) {
+		//fprintf(file, "%ld", deg[i]);
+		//fprintf(file,"\n");
+        for (int j = 0; j <= deg[i]; j++) {
+            fprintf(file, "%ld ", adj_list[i][j]);
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
 	free(deg);
+
 	return adj_list;
 }
 
@@ -635,7 +655,7 @@ int main(int argc, char *argv[]){
     char word[100];
     char* filename = strrchr(network, '/') + 1;
     sscanf(filename, "%[^.]", word);
-	sprintf(fname_infl,"%sINFLUENCERS_%s_lvl_%d.txt",subfolder, word,L);
+	sprintf(fname_infl,"INFLUENCERS_%s_lvl_%d.txt",word,L);
 
 	
 	N = get_num_nodes(network);
@@ -656,14 +676,16 @@ int main(int argc, char *argv[]){
 	
 	
 	//WRITE INFLUENCERS ON A FILE
-	
-	FILE *list_inf = fopen(fname_infl, "w");
+	char f_path[100];
+	strcpy(f_path, subfolder);
+	strcat(f_path, fname_infl);
+	FILE *list_inf = fopen(f_path, "w");
 	fprintf(list_inf, "# LIST OF INFLUENCERS (IN DECREASING ORDER OF INFLUENCE)\n\n");
 	fprintf(list_inf, "# NUMBER OF NODES = %ld\n", N); 
 	fprintf(list_inf, "# CI LEVEL L = %d\n\n", L);
 	fprintf(list_inf, "# $1 = SCORE  $2 = NODE_ID $3 = DEGREE $4 = COMPONENT\n\n");
 	for(i = 1; i <= listInfluencers[0]; i++)
-		fprintf(list_inf, "%ld\t %ld\t %ld\t %ld\n", i, listInfluencers[i] - 1, Graph[listInfluencers[i]][0], Node[i].compNum);
+		fprintf(list_inf, "%ld\t %ld\t %ld\t %ld\n", i, listInfluencers[i], Graph[listInfluencers[i]][0], Node[i].compNum);
 	fclose(list_inf);
 	free(listInfluencers);
 	

@@ -28,7 +28,7 @@ node_list = list(G.nodes)
 #write mapping 
 with open("mapping.txt", 'w') as f:
     for i in range(len(node_list)):
-        f.write("{0} {1}".format(node_list[i], i))
+        f.write("{0} {1}".format(node_list[i], i+1))
         f.write('\n')
 
 print(len(node_list))

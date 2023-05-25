@@ -27,13 +27,20 @@ done
 python3 create_integer_adjlist.py
 
 input_folder="CI_Heap_input"
-#for ((i = 1; i <= 3; i += radial_increase)) do
-#    for file in "$input_folder"/*; do
-#        ./CI "$file" $i
-#    done
-#done
+#with radial increase
+for ((i = 1; i <= 3; i += radial_increase)) do
+    for file in "$input_folder"/*; do
+        if [[ "$file" != "README.md" ]]; then
+            ./CI "$file" $i
+        fi
+    done
+done
 
-
+#without radial increase
 #for file in "$input_folder"/*; do
-#    ./CI "$file" 1
+#    if [[ "$file" != "README.md"]]; then
+#       ./CI "$file" 1
+#    fi
 #done
+
+python3 results.py
