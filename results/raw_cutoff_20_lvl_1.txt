@@ -1,0 +1,1 @@
+Ranking	Node	Degree	Componenet

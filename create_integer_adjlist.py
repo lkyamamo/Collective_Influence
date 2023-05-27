@@ -3,7 +3,7 @@ import os
 import sys
 
 mapped_data_path = os.getcwd() + "/mapped_data"
-shift_path = os.getcwd() + "/shift"
+secondary_mapping_path = os.getcwd() + "/secondary_mapping"
 N = int(sys.argv[1])
 
 graphs = []
@@ -39,10 +39,10 @@ for graph in graphs:
     #sort output dictionary according to integer key
     sorted_output = dict(sorted(output.items()))
 
-    #get integer value of first node
-    shift = next(iter(sorted_output)) - 1
-    with open(shift_path + "/" + graph[1][:-23] + ".txt", "w") as f:
-        f.write(str(shift))
+    #map nodes to be sequential keys will be the original non-sequential integers and the values with be the new sequential values
+    #shift = next(iter(sorted_output)) - 1
+    #with open(secondary_mapping_path + "/" + graph[1][:-23] + ".txt", "w") as f:
+    #    f.write(str(shift))
 
     #print results into output file
     with open(dir_path + "/" + graph[1][:-23] + ".txt", "w") as f:
@@ -50,11 +50,11 @@ for graph in graphs:
         for key, values in sorted_output.items():
 
             #write node
-            f.write("{0} ".format(key - shift))
+            f.write("{0} ".format(key))
 
             #write neighbors
             for element in values:
-                f.write("{0} ".format(str(int(element) - shift)))
+                f.write("{0} ".format(element))
             f.write("\n")
     """
     with open(dir_path + "/" + graph[1][:-23] + ".txt", "w") as f:
