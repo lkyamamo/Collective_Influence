@@ -2,7 +2,9 @@
 
 #variables
 cutoff_iteration_size=5
+cutoff_limit=5
 radial_increase=1
+radial_cutoff=1
 
 
 #create mapping for all data
@@ -16,7 +18,7 @@ rm "$tmpfile"
 raw_data_folder="raw_data"
 
 #Loop through different cutoff values
-for ((i = 0; i <= 20; i += $cutoff_iteration_size)) do
+for ((i = 0; i <= "$cutoff_limit"; i += "$cutoff_iteration_size")) do
 
     #loop through all files in the folder
     for file in "$raw_data_folder"/*; do
@@ -33,7 +35,7 @@ python3 create_integer_adjlist.py "$N"
 
 input_folder="CI_Heap_input"
 #with radial increase
-for ((i = 1; i <= 3; i += radial_increase)) do
+for ((i = 1; i <= "$radial_cutoff"; i += "$radial_increase")) do
     for file in "$input_folder"/*; do
         if [[ "$file" != *"README.md" ]]; then
             ./CI "$file" "$i"

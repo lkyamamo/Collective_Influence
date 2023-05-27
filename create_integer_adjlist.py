@@ -40,14 +40,28 @@ for graph in graphs:
     sorted_output = dict(sorted(output.items()))
 
     #map nodes to be sequential keys will be the original non-sequential integers and the values with be the new sequential values
-    #shift = next(iter(sorted_output)) - 1
-    #with open(secondary_mapping_path + "/" + graph[1][:-23] + ".txt", "w") as f:
-    #    f.write(str(shift))
+    integer_mapping = {}
+    i = 1
+    for key in sorted_output:
+        integer_mapping[key] = i
+        i += 1
+
+    with open(secondary_mapping_path + "/" + graph[1][:-23] + ".txt", 'w') as f:
+        for key,value in integer_mapping.items():
+            f.write("{0} {1}\n".format(key,value))
+
+    output = {}
+
+    #convert the sorted_output
+    for key,values in sorted_output.items():
+        output[integer_mapping[key]] = []
+        for element in values:
+            output[integer_mapping[key]].append(integer_mapping[int(element)])
 
     #print results into output file
     with open(dir_path + "/" + graph[1][:-23] + ".txt", "w") as f:
 
-        for key, values in sorted_output.items():
+        for key, values in output.items():
 
             #write node
             f.write("{0} ".format(key))

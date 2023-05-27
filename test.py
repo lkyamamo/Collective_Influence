@@ -1,8 +1,16 @@
 import os
 
-ranking_name = "INFLUENCERS_original_cutoff_0_lvl_1.txt"
-shift_name = "original_cutoff_0.txt"
+collective_influence = os.getcwd()
 
-searching_name = (ranking_name.split()[0])[12:-10] + ".txt"
+influencer_ranking_path = collective_influence + "/Influencer_ranking"
+results_path = collective_influence + "/results/"
 
-print(searching_name)
+
+for file in os.scandir(influencer_ranking_path):
+    if(file.name[-2:] != "md"):
+
+        #map back to original integer value
+
+        file_path = collective_influence + "/secondary_mapping/" + (file.name.split()[0])[12:-10] + ".txt"
+
+        print(file_path)
