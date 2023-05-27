@@ -4,19 +4,28 @@ import re
 #top = 10 #change to see however many top influencers you want
 start_line = 8 #from structure of file
 
-influencer_ranking_path = "/home/logan/Research/MediaNetworks/Collective_Influence/Influencer_ranking"
-results_path = "/home/logan/Research/MediaNetworks/Collective_Influence/results/"
+collective_influence = os.getcwd()
+
+influencer_ranking_path = collective_influence + "/Influencer_ranking"
+results_path = collective_influence + "/results/"
 
 #create mapping from mapping.txt file
 mapping = {}
-with open("/home/logan/Research/MediaNetworks/Collective_Influence/mapping.txt", "r") as f:
+with open(collective_influence + "/mapping.txt", "r") as f:
     for line in f:
         values = line.split(' ')
         mapping[int(values[1])] = values[0]
 
-
+#loop over all files
 for file in os.scandir(influencer_ranking_path):
     if(file.name[-2:] != "md"):
+
+        #obtain shift value
+        ranking_name = file.name
+        searching_name = (ranking_name.split()[0])[12:-10] + ".txt"
+
+        
+
         with open(file.path, "r") as influencer_ranking_file:
             #create file name
             location = file.name.find('_')
