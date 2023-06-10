@@ -1,95 +1,87 @@
+/*
+
+This file will loop through all files in "raw_data" folder, find their associated integer mapping file in the 
+"maps" folder, and output an integer mapped integer edge list with specified cutoff value into the "mapped_data" folder
+
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
 #include <sstream>
+#include <filesystem>
 
-//command line input will be ./convert_to_integer input.txt mapping.txt cutoff_value
+//command line input will be ./convert_to_integer input_file.txt map_file.txt
+
 
 int main(int argc, char* argv[]) {
-    std::ifstream file_in(argv[1]);
-    std::ifstream mapping(argv[2]);
-    int cutoff = std::stoi(argv[3]);
+    std::string CI_path = "/home/logan/Research/MediaNetworks/Collective_Influence";
+    std::string cutoff_data_path = CI_path + "/cutoff_data";
 
-    //getting output file name
-    std::string file_name = argv[1];
-    size_t begin = file_name.find_last_of('/') + 1;
-    size_t last = file_name.find_last_of('.');
+    std::ifstream file_in(cutoff_data_path + "/" + argv[1]);
+    std::ifstream mapping(CI_path + "/maps/" + argv[2]);
+    std::cout << CI_path + "/maps/" + argv[2] << std::endl;
 
-    size_t length = last - begin;
-    file_name = file_name.substr(begin,length);
+    std::string inputString = argv[1];
+    std::string fileName = inputString.substr(0, inputString.find('.'));
+    if (fileName.substr(fileName.length() - 3) != ".md") {
+        //getting output file name
+        std::string file_name = fileName;
+        size_t begin = file_name.find_last_of('/') + 1;
+        size_t last = file_name.find_last_of('.');
 
-    //eliminating the network_ and _comm
-    begin = file_name.find_first_of('_') + 1;
-    last = file_name.find_last_of('_');
-    length = last-begin;
+        size_t length = last - begin;
+        file_name = file_name.substr(begin,length);
 
-    file_name = file_name.substr(begin,length);
+        //eliminating the network_ and _comm
+        begin = file_name.find_first_of('_') + 1;
+        last = file_name.find_last_of('_');
+        length = last-begin;
 
-    
+        file_name = file_name.substr(begin,length);
 
-    std::ofstream file_out("mapped_data/" + file_name + "_cutoff_" + std::to_string(cutoff) + "_integer_unweighted" + ".txt");
+        //get mapping file
+        std::ifstream mapping_file(CI_path + "/maps/" + file_name + "_mapping.txt");
 
-    // Check if we successfully opened the files
-    if (!mapping || !file_out) {
-        std::cerr << "Unable to open input file";
-        return 1;   // Return with error code
-    }
-
-    if (!mapping) {
-        std::cerr << "Unable to open mapping file";
-        return 1;   // Return with error code
-    }
-
-    //create map from mapping file
-
-    std::string line;
-    std::map<std::string, std::string> node_map;
-
-    // Read each line in and add the key value pair to the map
-    while (std::getline(mapping, line)) {
-        std::stringstream ss(line);
-        std::string key;
-        std::string value;
-
-        ss >> key;
-        ss >> value;
-
-        node_map.insert(std::make_pair(key, value));
-
-
-    }
-
-    //create the new output file that will be the integer mapped version of the raw data
-    std::string old_node1, old_node2, weight;
-    std::string new_word;  
-
-    // Read lines from the file one by one
-    while (std::getline(file_in, line)) {
-        std::stringstream ss(line);
-
-        //get the nodes from the edge and write the mapped node values to the output file
-        ss >> old_node1;
-        ss >> old_node2;
-        ss >> weight;
-        
-        //with cutoffs
-        
-        if(std::stoi(weight) > cutoff){
-            file_out << node_map[old_node1] << ' ' << node_map[old_node2];
-            file_out << "\n";
+        if(!mapping_file){
+            std::cout << "could not open map file" << std::endl;
         }
-        
 
-        //without cutoffs
-        //file_out << node_map[old_node1] << ' ' << node_map[old_node2];
-        //file_out << "\n";
+        //create map from mapping file
+
+        std::string line;
+        std::map<std::string, std::string> node_map;
+
+        // Read each line in and add the key value pair to the map
+        while (std::getline(mapping_file, line)) {
+            std::stringstream ss(line);
+            std::string key;
+            std::string value;
+
+            ss >> key;
+            ss >> value;
+
+            node_map.insert(std::make_pair(key, value));
+
+
+        }
+        mapping_file.close();
+
+        //create the new output file that will be the integer mapped version of the raw data
+        std::string old_node1, old_node2;
+
+        std::ofstream file_out("mapped_data/" + file_name + "_integer_unweighted" + ".txt");
+        // Read lines from the file one by one
+        while (std::getline(file_in, line)) {
+            std::stringstream ss(line);
+
+            //get the nodes from the edge and write the mapped node values to the output file
+            ss >> old_node1;
+            ss >> old_node2;
+            
+        }
+        file_in.close();
+        file_out.close();
     }
-
-    
-
-    file_in.close();
-    file_out.close();
-
-    return 0;
 }

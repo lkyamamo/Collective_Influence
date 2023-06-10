@@ -1,0 +1,1 @@
+This folder will have the name to integer node mapping created by "create_node_mapping.py" for each network in "raw_data" folder.

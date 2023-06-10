@@ -10,6 +10,20 @@ collective_influence = os.getcwd()
 influencer_ranking_path = collective_influence + "/Influencer_ranking"
 results_path = collective_influence + "/results/"
 
+#loop over all files
+for file in os.scandir(influencer_ranking_path):
+    if(file.name[-2:] != "md"):
+        with open(file.path, "r") as influencer_ranking_file:
+            #create file name
+            location = file.name.find('_')
+            output_name = results_path + file.name[location+1:]
+
+            print(output_name + "\n")
+            #with open(output_name, "w") as results_file:
+
+"""
+Old implementation with double filter
+
 #create mapping from mapping.txt file
 mapping = {}
 with open(collective_influence + "/mapping.txt", "r") as f:
@@ -46,3 +60,4 @@ for file in os.scandir(influencer_ranking_path):
                     numbers = [int(num) for num in numbers]
                     numbers[1] = mapping[int(secondary_mapping[numbers[1]])]
                     results_file.write(f"{numbers[0]} \t {numbers[1]} \t {numbers[2]} \t {numbers[3]} \n")
+"""
